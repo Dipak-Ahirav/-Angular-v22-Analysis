@@ -514,6 +514,102 @@
       border-radius: 20px;
       color: var(--muted);
     }
+    .author-footer {
+  margin-top: 80px;
+  padding: 80px 20px;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.02),
+    rgba(255,255,255,0.05)
+  );
+}
+
+.author-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.author-logo {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 24px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 28px;
+  font-weight: 800;
+  color: white;
+
+  background: linear-gradient(
+    135deg,
+    #ff2d75,
+    #8b5cf6
+  );
+
+  box-shadow:
+    0 20px 40px rgba(255,45,117,.3),
+    0 20px 40px rgba(139,92,246,.3);
+}
+
+.author-footer h3 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 800;
+  color: white;
+}
+
+.author-role {
+  margin-top: 10px;
+  color: #cbd5e1;
+  font-size: 16px;
+}
+
+.author-description {
+  max-width: 650px;
+  margin: 20px auto;
+  color: #94a3b8;
+  line-height: 1.8;
+}
+
+.author-links {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 25px;
+}
+
+.author-links a {
+  padding: 12px 20px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+
+  transition: all 0.3s ease;
+}
+
+.author-links a:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(
+    135deg,
+    #ff2d75,
+    #8b5cf6
+  );
+}
+
+.copyright {
+  margin-top: 30px;
+  color: #64748b;
+  font-size: 14px;
+}
 
     @media (max-width: 950px) {
       .hero { grid-template-columns: 1fr; padding-top: 60px; }
@@ -1459,9 +1555,44 @@ export const appConfig: ApplicationConfig = {
     </section>
   </main>
 
-  <footer class="footer">
-    Built as a single-file HTML page for GitHub Pages. Source article: Angular Blog — Announcing Angular v22.
-  </footer>
+ <footer class="author-footer">
+  <div class="author-container">
+
+    <div class="author-logo">
+      DA
+    </div>
+
+    <h3>Created by Dipak Ahirav</h3>
+
+    <p class="author-role">
+      Senior Angular Engineer • Software Architect • Technical Writer
+    </p>
+
+    <p class="author-description">
+      Passionate about Angular, Frontend Architecture, Performance Engineering,
+      Enterprise Applications, Signals, SSR, and Modern Web Development.
+    </p>
+
+    <div class="author-links">
+      <a href="https://medium.com/angular-engineering" target="_blank">
+        Angular Engineering
+      </a>
+
+      <a href="https://github.com/dipak-ahirav" target="_blank">
+        GitHub
+      </a>
+
+      <a href="https://www.linkedin.com/in/dipakahirav" target="_blank">
+        LinkedIn
+      </a>
+    </div>
+
+    <p class="copyright">
+      © 2026 Dipak Ahirav. All Rights Reserved.
+    </p>
+
+  </div>
+</footer>
 </div>
 
 <script>
