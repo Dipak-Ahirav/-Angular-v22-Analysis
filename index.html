@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Angular v22 Complete Analysis | Senior Angular Architect Guide</title>
+  <meta name="description" content="A complete Senior Angular Architect analysis of Angular v22 updates including Signal Forms, Angular Aria, resource, httpResource, MCP, WebMCP, router updates, @Service, injectAsync, templates, OnPush default, and migration notes." />
+  <meta name="keywords" content="Angular v22, Angular 22, Signal Forms, Angular Aria, resource API, httpResource, Zoneless Angular, Angular MCP, WebMCP, injectAsync, @Service, Angular Router, TypeScript 6" />
+  <meta name="author" content="Dipak Ahirav" />
+
+  <meta property="og:title" content="Angular v22 Complete Analysis — Senior Architect Guide" />
+  <meta property="og:description" content="Explore Angular v22 with examples, before/after comparisons, production best practices, common mistakes, interview questions, and a learning roadmap." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dipak-ahirav.github.io/angular-v22-analysis/" />
+  <meta property="og:image" content="https://angular.dev/assets/images/press-kit/angular_icon_gradient.gif" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Angular v22 Complete Analysis — Senior Architect Guide" />
+  <meta name="twitter:description" content="A complete Angular v22 breakdown for frontend engineers and architects." />
+
+  <style>
+    :root {
+      --bg: #080913;
+      --bg-2: #10111f;
+      --card: rgba(255, 255, 255, 0.055);
+      --card-2: rgba(255, 255, 255, 0.085);
+      --border: rgba(255, 255, 255, 0.12);
+      --text: #f7f7fb;
+      --muted: #a5abc5;
+      --dim: #7f87a8;
+      --pink: #ff2d75;
+      --purple: #8b5cf6;
+      --blue: #22d3ee;
+      --green: #4ade80;
+      --yellow: #facc15;
+      --red: #fb7185;
+      --code: #0b1020;
+      --shadow: 0 30px 90px rgba(0,0,0,.4);
+      --radius: 22px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255, 45, 117, .18), transparent 30%),
+        radial-gradient(circle at 90% 20%, rgba(139, 92, 246, .22), transparent 32%),
+        radial-gradient(circle at 50% 90%, rgba(34, 211, 238, .11), transparent 35%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .site-shell { min-height: 100vh; }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(8, 9, 19, .72);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 14px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -.03em;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      box-shadow: 0 12px 35px rgba(255, 45, 117, .3);
+      font-weight: 900;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .nav-links a {
+      padding: 8px 10px;
+      border-radius: 999px;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background: var(--card);
+    }
+
+    .hero {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 90px 22px 50px;
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,45,117,.35);
+      background: rgba(255,45,117,.08);
+      color: #ffd5e4;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 22px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(42px, 7vw, 84px);
+      line-height: .95;
+      letter-spacing: -.07em;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #fff, #ffd1e1 36%, #b7a2ff 68%, #7ee7ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      padding: 13px 18px;
+      border-radius: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      border-color: transparent;
+      box-shadow: 0 20px 50px rgba(139, 92, 246, .25);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      background: var(--card-2);
+    }
+
+    .hero-card {
+      padding: 26px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.04));
+      box-shadow: var(--shadow);
+    }
+
+    .metric-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .metric {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(0,0,0,.22);
+      border: 1px solid var(--border);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 26px;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    main {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 12px 22px 80px;
+    }
+
+    section {
+      margin: 28px 0;
+      padding: 38px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.045);
+      box-shadow: 0 18px 50px rgba(0,0,0,.18);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .num {
+      min-width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      background: linear-gradient(135deg, rgba(255,45,117,.28), rgba(139,92,246,.24));
+      color: #fff;
+      border: 1px solid var(--border);
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 42px);
+      line-height: 1.05;
+      letter-spacing: -.045em;
+    }
+
+    h3 {
+      margin: 28px 0 10px;
+      font-size: 22px;
+      letter-spacing: -.03em;
+    }
+
+    p { color: var(--muted); }
+
+    .toc {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .toc a {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(0,0,0,.20);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-weight: 750;
+      font-size: 14px;
+    }
+
+    .toc a:hover {
+      color: var(--text);
+      border-color: rgba(255,45,117,.5);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .card {
+      padding: 22px;
+      border-radius: 20px;
+      background: rgba(0,0,0,.22);
+      border: 1px solid var(--border);
+    }
+
+    .card h4 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .card p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .pill {
+      display: inline-flex;
+      margin-bottom: 12px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      border: 1px solid var(--border);
+      color: #fff;
+      background: rgba(255,255,255,.08);
+    }
+
+    .stable { color: #d8ffe6; background: rgba(74,222,128,.12); border-color: rgba(74,222,128,.25); }
+    .preview { color: #fff7cc; background: rgba(250,204,21,.12); border-color: rgba(250,204,21,.25); }
+    .experimental { color: #dffbff; background: rgba(34,211,238,.12); border-color: rgba(34,211,238,.25); }
+
+    .feature {
+      margin-top: 22px;
+      padding: 24px;
+      border-radius: 20px;
+      background: rgba(0,0,0,.20);
+      border: 1px solid var(--border);
+    }
+
+    .feature-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .feature h3 {
+      margin-top: 0;
+    }
+
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 18px 0;
+    }
+
+    .compare-box {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+    }
+
+    .compare-box.before { border-color: rgba(251,113,133,.24); }
+    .compare-box.after { border-color: rgba(74,222,128,.24); }
+
+    .compare-box b {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .code-wrap {
+      position: relative;
+      margin: 16px 0 0;
+    }
+
+    pre {
+      margin: 0;
+      padding: 22px;
+      border-radius: 18px;
+      background: var(--code);
+      border: 1px solid rgba(255,255,255,.12);
+      overflow-x: auto;
+      color: #d9e6ff;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    code {
+      font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+    }
+
+    .copy {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 7px 10px;
+      background: rgba(255,255,255,.09);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    ul.clean {
+      list-style: none;
+      padding: 0;
+      margin: 14px 0 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    ul.clean li {
+      padding: 13px 15px;
+      background: rgba(0,0,0,.18);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      color: var(--muted);
+    }
+
+    ul.clean li::before {
+      content: "✓";
+      color: var(--green);
+      font-weight: 900;
+      margin-right: 10px;
+    }
+
+    .warning li::before {
+      content: "✕" !important;
+      color: var(--red) !important;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 18px;
+      margin-top: 18px;
+      border: 1px solid var(--border);
+    }
+
+    th, td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: rgba(255,255,255,.08);
+      color: #fff;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    td {
+      color: var(--muted);
+      background: rgba(0,0,0,.16);
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .notes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .roadmap {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .phase {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 16px;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(0,0,0,.18);
+      border: 1px solid var(--border);
+    }
+
+    .phase b {
+      color: #fff;
+    }
+
+    .footer {
+      padding: 36px 22px 70px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .linkedin-box {
+      white-space: pre-wrap;
+      padding: 22px;
+      background: rgba(0,0,0,.22);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 950px) {
+      .hero { grid-template-columns: 1fr; padding-top: 60px; }
+      .toc { grid-template-columns: repeat(2, 1fr); }
+      .grid, .notes { grid-template-columns: 1fr 1fr; }
+      .compare { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 650px) {
+      section { padding: 24px; }
+      .grid, .notes, .toc { grid-template-columns: 1fr; }
+      .metric-grid { grid-template-columns: 1fr; }
+      .phase { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 46px; }
+    }
+  </style>
+</head>
+
+<body>
+<div class="site-shell">
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="#top">
+        <span class="logo">A</span>
+        <span>Angular v22 Analysis</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#examples">Examples</a>
+        <a href="#best-practices">Best Practices</a>
+        <a href="#interview">Interview</a>
+        <a href="#roadmap">Roadmap</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div>
+      <span class="badge">Angular v22 • Senior Architect Deep Dive</span>
+      <h1><span class="gradient-text">Angular v22</span><br />Complete Update Analysis</h1>
+      <p>
+        A production-focused guide to Angular v22: stable Signal Forms, Angular Aria,
+        asynchronous reactivity, AI tooling, router improvements, template syntax upgrades,
+        OnPush-by-default, async dependency injection, and migration notes.
+      </p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#features">Explore Updates</a>
+        <a class="btn" href="#linkedin">LinkedIn Caption</a>
+      </div>
+    </div>
+
+    <aside class="hero-card">
+      <div class="metric-grid">
+        <div class="metric"><strong>3</strong><span>Major APIs production-ready</span></div>
+        <div class="metric"><strong>AI</strong><span>MCP, WebMCP, Agent Skills</span></div>
+        <div class="metric"><strong>DX</strong><span>Better templates and router</span></div>
+        <div class="metric"><strong>Perf</strong><span>OnPush default and async DI</span></div>
+      </div>
+    </aside>
+  </header>
+
+  <main>
+    <section>
+      <div class="section-title">
+        <div class="num">00</div>
+        <div>
+          <h2>Table of Contents</h2>
+          <p>Use this page as a learning guide, interview revision sheet, and GitHub Pages documentation page.</p>
+        </div>
+      </div>
+      <div class="toc">
+        <a href="#summary">Executive Summary</a>
+        <a href="#features">Main Features</a>
+        <a href="#examples">Code Examples</a>
+        <a href="#ai">AI Updates</a>
+        <a href="#router">Router Updates</a>
+        <a href="#templates">Template Updates</a>
+        <a href="#performance">Performance</a>
+        <a href="#migration">Migration Notes</a>
+        <a href="#best-practices">Best Practices</a>
+        <a href="#mistakes">Common Mistakes</a>
+        <a href="#interview">Interview Questions</a>
+        <a href="#roadmap">Learning Roadmap</a>
+      </div>
+    </section>
+
+    <section id="summary">
+      <div class="section-title">
+        <div class="num">01</div>
+        <div>
+          <h2>Executive Summary</h2>
+          <p>Angular v22 is a stability and platform-expansion release.</p>
+        </div>
+      </div>
+
+      <p>
+        Angular v22 focuses on making modern Angular production-ready. The release graduates
+        three important capabilities to stable: <strong>Signal Forms</strong>,
+        <strong>Angular Aria</strong>, and <strong>asynchronous reactivity APIs</strong>
+        such as <code>resource</code> and <code>httpResource</code>.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <span class="pill stable">Stable</span>
+          <h4>Signal-first Angular</h4>
+          <p>Forms and async data loading now align more closely with Angular Signals.</p>
+        </div>
+        <div class="card">
+          <span class="pill stable">Stable</span>
+          <h4>Accessible UI primitives</h4>
+          <p>Angular Aria helps teams build accessible custom components without locking into one visual design.</p>
+        </div>
+        <div class="card">
+          <span class="pill preview">Developer Experience</span>
+          <h4>Better templates</h4>
+          <p>Template comments, spread syntax, improved @switch, and arrow functions reduce boilerplate.</p>
+        </div>
+      </div>
+
+      <h3>Why Angular v22 is important</h3>
+      <ul class="clean">
+        <li>It makes Signal Forms production-ready for teams building complex enterprise forms.</li>
+        <li>It makes <code>resource</code> and <code>httpResource</code> production-ready for declarative async data.</li>
+        <li>It strengthens Angular's AI development story using MCP, Agent Skills, and WebMCP.</li>
+        <li>It improves performance defaults with OnPush for new applications.</li>
+        <li>It prepares the ecosystem for future builder and TSGo-focused improvements.</li>
+      </ul>
+    </section>
+
+    <section id="features">
+      <div class="section-title">
+        <div class="num">02</div>
+        <div>
+          <h2>Main Angular v22 Features</h2>
+          <p>Each feature includes explanation, use case, before/after, code, best practice, and common mistakes.</p>
+        </div>
+      </div>
+
+      <article class="feature">
+        <div class="feature-header">
+          <div>
+            <span class="pill stable">Production Ready</span>
+            <h3>1. Signal Forms</h3>
+          </div>
+        </div>
+
+        <p>
+          Signal Forms is Angular's new forms API that combines strong typing, reactive forms ideas,
+          template-driven simplicity, and signal-based reactivity.
+        </p>
+
+        <div class="compare">
+          <div class="compare-box before">
+            <b>Before</b>
+            <p>Forms were usually handled with <code>FormGroup</code>, <code>FormControl</code>, validators, and observables.</p>
+          </div>
+          <div class="compare-box after">
+            <b>After</b>
+            <p>Forms can be modeled with a signal-backed model and schema-based validation.</p>
+          </div>
+        </div>
+
+        <h4>Real-world use case</h4>
+        <p>Payment forms, profile forms, onboarding flows, enterprise workflow forms, and admin configuration screens.</p>
+
+        <div class="code-wrap">
+          <button class="copy">Copy</button>
+          <pre><code>import { signal } from '@angular/core';
+import { form, required } from '@angular/forms/signals';
+
+export class PaymentComponent {
+  readonly paymentModel = signal({
+    paymentType: '',
+    amount: 0
+  });
+
+  readonly f = form(this.paymentModel, schema => {
+    required(schema.paymentType, {
+      message: 'Payment type is required'
+    });
+  });
+}</code></pre>
+        </div>
+
+        <div class="code-wrap">
+          <button class="copy">Copy</button>
+          <pre><code>&lt;form&gt;
+  &lt;label for="payment-type"&gt;Payment Type&lt;/label&gt;
+
+  &lt;select id="payment-type" [formField]="f.paymentType"&gt;
+    &lt;option value=""&gt;Select payment method&lt;/option&gt;
+    &lt;option value="credit"&gt;Credit Card&lt;/option&gt;
+    &lt;option value="paypal"&gt;Payment Service&lt;/option&gt;
+  &lt;/select&gt;
+
+  @if (f.paymentType().invalid() && f.paymentType().touched()) {
+    @for (error of f.paymentType().errors(); track error.kind) {
+      &lt;p class="error"&gt;{{ error.message }}&lt;/p&gt;
+    }
+  }
+
+  &lt;button type="submit" [disabled]="f().invalid()"&gt;
+    Submit Payment
+  &lt;/button&gt;
+&lt;/form&gt;</code></pre>
+        </div>
+
+        <h4>Best practices</h4>
+        <ul class="clean">
+          <li>Keep form model structure close to your business DTO.</li>
+          <li>Use schema validation for reusable validation rules.</li>
+          <li>Prefer Signal Forms for new complex forms in Angular v22.</li>
+        </ul>
+
+        <h4>Common mistakes</h4>
+        <ul class="clean warning">
+          <li>Mixing too much manual DOM state with Signal Forms.</li>
+          <li>Putting large validation logic directly inside templates.</li>
+          <li>Migrating every old form at once instead of gradually.</li>
+        </ul>
+      </article>
+
+      <article class="feature">
+        <span class="pill stable">Production Ready</span>
+        <h3>2. Angular Aria</h3>
+        <p>
+          Angular Aria provides accessible, headless UI patterns. You bring your own styles and business logic;
+          Angular Aria handles accessibility behavior like keyboard interaction, ARIA roles, and focus patterns.
+        </p>
+
+        <div class="compare">
+          <div class="compare-box before">
+            <b>Before</b>
+            <p>Teams had to manually implement ARIA behavior for custom dropdowns, menus, trees, and tabs.</p>
+          </div>
+          <div class="compare-box after">
+            <b>After</b>
+            <p>Teams can build custom design-system components using tested accessibility primitives.</p>
+          </div>
+        </div>
+
+        <h4>Real-world use case</h4>
+        <p>Design systems, banking dashboards, enterprise admin tools, custom menus, custom trees, and accessible component libraries.</p>
+
+        <div class="code-wrap">
+          <button class="copy">Copy</button>
+          <pre><code>&lt;!-- Example concept: custom accessible menu --&gt;
+&lt;button aria-haspopup="menu" aria-expanded="false"&gt;
+  Actions
+&lt;/button&gt;
+
+&lt;div role="menu"&gt;
+  &lt;button role="menuitem"&gt;Edit&lt;/button&gt;
+  &lt;button role="menuitem"&gt;Duplicate&lt;/button&gt;
+  &lt;button role="menuitem"&gt;Delete&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+
+        <ul class="clean">
+          <li>Use Angular Aria when building custom UI components instead of reinventing accessibility behavior.</li>
+          <li>Test keyboard navigation and screen-reader behavior, not only visual design.</li>
+        </ul>
+      </article>
+
+      <article class="feature">
+        <span class="pill stable">Production Ready</span>
+        <h3>3. Asynchronous Reactivity: resource and httpResource</h3>
+        <p>
+          <code>resource</code> and <code>httpResource</code> allow Angular applications to handle async state
+          using a signal-friendly mental model.
+        </p>
+
+        <div class="compare">
+          <div class="compare-box before">
+            <b>Before</b>
+            <p>Developers used observables, manual loading flags, error flags, and subscriptions.</p>
+          </div>
+          <div class="compare-box after">
+            <b>After</b>
+            <p>Async data can be represented as a resource with value, loading, error, and reactive parameters.</p>
+          </div>
+        </div>
+
+        <div class="code-wrap">
+          <button class="copy">Copy</button>
+          <pre><code>import { resource, signal, computed } from '@angular/core';
+
+const selectedCity = signal('Pune');
+
+const weatherResource = resource({
+  params: () => ({ city: selectedCity() }),
+  loader: ({ params }) => fetchWeatherForecast(params.city),
+});
+
+const currentTemperature = computed(() => {
+  if (weatherResource.hasValue()) {
+    return `${weatherResource.value().temperature}°C`;
+  }
+
+  return 'Loading weather...';
+});</code></pre>
+        </div>
+
+        <div class="code-wrap">
+          <button class="copy">Copy</button>
+          <pre><code>import { signal } from '@angular/core';
+import { httpResource } from '@angular/common/http';
+
+export class WeatherComponent {
+  selectedCity = signal('Pune');
+
+  weather = httpResource&lt;{ temperature: number; condition: string }&gt;(() => {
+    return `/api/forecast/${this.selectedCity()}`;
+  });
+
+  changeCity(city: string) {
+    this.selectedCity.set(city);
+  }
+}</code></pre>
+        </div>
+
+        <h4>Best practices</h4>
+        <ul class="clean">
+          <li>Use <code>httpResource</code> for simple HTTP-driven UI state.</li>
+          <li>Use <code>resource</code> when the async source is not only HTTP.</li>
+          <li>Keep complex stream transformations in RxJS when they are truly stream-based.</li>
+        </ul>
+      </article>
+
+      <article class="feature" id="performance">
+        <span class="pill stable">Performance Default</span>
+        <h3>4. OnPush is Default for New Applications</h3>
+        <p>
+          Angular v22 aligns new applications with performance-first rendering by making OnPush the default.
+          Components no longer need to specify OnPush explicitly in new applications.
+        </p>
+
+        <div class="compare">
+          <div class="compare-box before">
+            <b>Before</b>
+            <p>Developers had to write <code>changeDetection: ChangeDetectionStrategy.OnPush</code> manually.</p>
+          </div>
+          <div class="compare-box after">
+            <b>After</b>
+            <p>New apps use OnPush by default, reducing unnecessary change detection work.</p>
+          </div>
+        </div>
+
+        <div class="code-wrap">
+          <button class="copy">Copy</button>
+          <pre><code>// Angular v22 new application style
+@Component({
+  selector: 'app-weather',
+  template: `&lt;section&gt;Loading Weather...&lt;/section&gt;`
+})
+export class WeatherComponent {
+  // OnPush behavior by default in new applications
+}</code></pre>
+        </div>
+
+        <p>
+          The old default strategy has also been renamed to <code>ChangeDetectionStrategy.Eager</code>
+          to make its behavior clearer.
+        </p>
+
+        <div class="code-wrap">
+          <button class="copy">Copy</button>
+          <pre><code>@Component({
+  selector: 'app-legacy-widget',
+  template: `&lt;section&gt;Legacy Widget&lt;/section&gt;`,
+  changeDetection: ChangeDetectionStrategy.Eager
+})
+export class LegacyWidgetComponent {}</code></pre>
+        </div>
+      </article>
+
+      <article class="feature">
+        <span class="pill preview">New API</span>
+        <h3>5. @Service Decorator</h3>
+        <p>
+          Angular v22 introduces <code>@Service()</code> as a clearer way to define global singleton services.
+          It improves readability compared with <code>@Injectable({ providedIn: 'root' })</code> for common use cases.
+        </p>
+
+        <div class="compare">
+          <div class="compare-box before">
+            <b>Before</b>
+            <p><code>@Injectable({ providedIn: 'root' })</code> was used for most application-wide services.</p>
+          </div>
+          <div class="compare-box after">
+            <b>After</b>
+            <p><code>@Service()</code> communicates intent more directly for singleton services.</p>
+          </div>
+        </div>
+
+        <div class="code-wrap">
+          <button class="copy">Copy</button>
+          <pre><code>import { Service } from '@angular/core';
+
+@Service()
+export class BasicDataStore {
+  private data: string[] = [];
+
+  addData(item: string): void {
+    this.data.push(item);
+  }
+
+  getData(): string[] {
+    return [...this.data];
+  }
+}</code></pre>
+        </div>
+      </article>
+
+      <article class="feature">
+        <span class="pill preview">Performance API</span>
+        <h3>6. injectAsync</h3>
+        <p>
+          <code>injectAsync</code> enables asynchronous dependency injection. This means large services can be loaded
+          only when needed, enabling service-level code splitting.
+        </p>
+
+        <div class="compare">
+          <div class="compare-box before">
+            <b>Before</b>
+            <p>Routes and components could be lazy-loaded, but services were commonly loaded upfront.</p>
+          </div>
+          <div class="compare-box after">
+            <b>After</b>
+            <p>Heavy services can be imported on demand and even prefetched when idle.</p>
+          </div>
+        </div>
+
+        <div class="code-wrap">
+          <button class="copy">Copy</button>
+          <pre><code>import { Component, injectAsync } from '@angular/core';
+
+@Component({
+  selector: 'app-report',
+  template: `&lt;button (click)="export()"&gt;Export&lt;/button&gt;`,
+})
+export class ReportComponent {
+  private exporter = injectAsync(() => import('./report-exporter'));
+
+  async export() {
+    const exporter = await this.exporter();
+    exporter.export();
+  }
+}</code></pre>
+        </div>
+
+        <div class="code-wrap">
+          <button class="copy">Copy</button>
+          <pre><code>export class ReportComponent {
+  private exporter = injectAsync(() => import('./report-exporter'), {
+    prefetch: onIdle,
+  });
+}</code></pre>
+        </div>
+      </article>
+    </section>
+
+    <section id="ai">
+      <div class="section-title">
+        <div class="num">03</div>
+        <div>
+          <h2>AI Development Updates</h2>
+          <p>Angular v22 makes Angular more agent-friendly and AI-native.</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <span class="pill stable">MCP Stable</span>
+          <h4>Agentic code tooling</h4>
+          <p>Angular MCP includes tools such as devserver start, stop, and build waiting.</p>
+        </div>
+        <div class="card">
+          <span class="pill stable">Agent Skills</span>
+          <h4>Angular Agent Skills</h4>
+          <p>Skills give coding agents modern Angular guidance for features like Signal Forms and Angular Aria.</p>
+        </div>
+        <div class="card">
+          <span class="pill experimental">Experimental</span>
+          <h4>WebMCP</h4>
+          <p>Apps can expose structured browser tools for agents, including tools generated from Signal Forms.</p>
+        </div>
+      </div>
+
+      <h3>Architectural meaning</h3>
+      <p>
+        Angular is not only improving the framework. It is also improving how AI assistants understand,
+        generate, run, test, and modernize Angular applications.
+      </p>
+
+      <div class="code-wrap">
+        <button class="copy">Copy</button>
+        <pre><code>// Example agent workflow idea
+1. Agent starts Angular dev server
+2. Agent waits for build result
+3. Agent reads compilation errors
+4. Agent fixes code
+5. Agent runs tests
+6. Agent repeats until the app is healthy</code></pre>
+      </div>
+    </section>
+
+    <section id="router">
+      <div class="section-title">
+        <div class="num">04</div>
+        <div>
+          <h2>Router Updates</h2>
+          <p>Angular v22 improves navigation and route cleanup.</p>
+        </div>
+      </div>
+
+      <article class="feature">
+        <h3>Platform Navigation API Integration</h3>
+        <p>
+          The router can integrate with the browser's native Navigation API. This helps with navigation interception,
+          native scroll behavior, loading indicators, and accessibility announcements.
+        </p>
+
+        <div class="code-wrap">
+          <button class="copy">Copy</button>
+          <pre><code>bootstrapApplication(AppComponent, {
+  providers: [
+    provideRouter(appRoutes, withExperimentalPlatformNavigation())
+  ]
+});</code></pre>
+        </div>
+      </article>
+
+      <article class="feature">
+        <h3>Route Cleanup Controls</h3>
+        <p>
+          <code>withExperimentalAutoCleanupInjectors</code> helps destroy injectors connected to inactive routes.
+          This can prevent memory leaks in large route-heavy applications.
+        </p>
+
+        <div class="code-wrap">
+          <button class="copy">Copy</button>
+          <pre><code>import {
+  provideRouter,
+  withExperimentalAutoCleanupInjectors,
+} from '@angular/router';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(
+      routes,
+      withExperimentalAutoCleanupInjectors(),
+    )
+  ]
+};</code></pre>
+        </div>
+      </article>
+    </section>
+
+    <section id="templates">
+      <div class="section-title">
+        <div class="num">05</div>
+        <div>
+          <h2>Template Improvements</h2>
+          <p>Angular v22 makes templates more expressive and easier to maintain.</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h4>Comments inside elements</h4>
+          <p>You can document bindings and attributes directly inside an element.</p>
+        </div>
+        <div class="card">
+          <h4>Spread syntax</h4>
+          <p>Object, array, and function-call spread syntax can be used in templates.</p>
+        </div>
+        <div class="card">
+          <h4>Better @switch</h4>
+          <p>Multiple cases can share output, and exhaustive checking can use <code>@default never</code>.</p>
+        </div>
+        <div class="card">
+          <h4>Arrow functions</h4>
+          <p>Small inline arrow functions are now valid in templates.</p>
+        </div>
+        <div class="card">
+          <h4>Host directive de-duplication</h4>
+          <p>Angular automatically de-duplicates matching host directives.</p>
+        </div>
+        <div class="card">
+          <h4>Better maintainability</h4>
+          <p>These changes reduce boilerplate and help humans and AI agents understand templates.</p>
+        </div>
+      </div>
+
+      <h3>Template comments</h3>
+      <div class="code-wrap">
+        <button class="copy">Copy</button>
+        <pre><code>&lt;div
+  // valid comment
+  /* another valid comment */
+  attr1="value1"
+  /*
+    comment spanning multiple lines
+  */
+  attr2="value2"&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+
+      <h3>Spread syntax in templates</h3>
+      <div class="code-wrap">
+        <button class="copy">Copy</button>
+        <pre><code>&lt;section&gt;
+  &lt;div [class]="{
+    ...standardCupStyles,
+    'cardboard-sleeve': isHotDrink
+  }"&gt;
+  &lt;/div&gt;
+
+  &lt;app-bakery-cart
+    [pastryOrder]="[...dailyPastryBasics, 'croissant', 'muffin']" /&gt;
+
+  &lt;p&gt;
+    Total Cost: {{ calculateBill(...baseItemPrices, salesTax) }}
+  &lt;/p&gt;
+&lt;/section&gt;</code></pre>
+      </div>
+
+      <h3>Improved @switch</h3>
+      <div class="code-wrap">
+        <button class="copy">Copy</button>
+        <pre><code>@switch (orderStatus) {
+  @case ('Pending')
+  @case ('Processing') {
+    &lt;p class="badge-blue"&gt;In progress&lt;/p&gt;
+  }
+
+  @case ('Shipped') {
+    &lt;p class="badge-green"&gt;On its way!&lt;/p&gt;
+  }
+
+  @default never;
+}</code></pre>
+      </div>
+
+      <h3>Arrow functions in templates</h3>
+      <div class="code-wrap">
+        <button class="copy">Copy</button>
+        <pre><code>&lt;p&gt;Stock: {{ item().stock }}&lt;/p&gt;
+
+&lt;button
+  (click)="item.update(p => ({ ...p, stock: p.stock - 1 }))"&gt;
+  Decrease Stock
+&lt;/button&gt;</code></pre>
+      </div>
+    </section>
+
+    <section id="examples">
+      <div class="section-title">
+        <div class="num">06</div>
+        <div>
+          <h2>Real-world Architecture Examples</h2>
+          <p>How Angular v22 features map to real applications.</p>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Application Type</th>
+            <th>Angular v22 Feature</th>
+            <th>Architecture Benefit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Banking / Insurance workflow</td>
+            <td>Signal Forms</td>
+            <td>Strongly typed, reactive, maintainable enterprise forms.</td>
+          </tr>
+          <tr>
+            <td>Admin dashboard</td>
+            <td>httpResource + OnPush</td>
+            <td>Declarative API state with efficient rendering.</td>
+          </tr>
+          <tr>
+            <td>Design system</td>
+            <td>Angular Aria</td>
+            <td>Accessible custom components without fixed UI styling.</td>
+          </tr>
+          <tr>
+            <td>Reporting module</td>
+            <td>injectAsync</td>
+            <td>Load heavy export/report services only when required.</td>
+          </tr>
+          <tr>
+            <td>AI-assisted development</td>
+            <td>MCP + Agent Skills</td>
+            <td>Agents can build, test, modernize, and follow Angular best practices.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="best-practices">
+      <div class="section-title">
+        <div class="num">07</div>
+        <div>
+          <h2>Production Best Practices</h2>
+          <p>Recommended practices for Angular v22 projects.</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h4>Use Signals intentionally</h4>
+          <p>Use signals for local and derived state. Keep RxJS for complex stream orchestration.</p>
+        </div>
+        <div class="card">
+          <h4>Adopt Signal Forms gradually</h4>
+          <p>Start with new forms, then migrate old forms where it gives real maintainability value.</p>
+        </div>
+        <div class="card">
+          <h4>Use Angular Aria for custom UI</h4>
+          <p>Accessibility should be designed into your component system, not added at the end.</p>
+        </div>
+        <div class="card">
+          <h4>Prefer OnPush mental model</h4>
+          <p>Write components assuming explicit, predictable state updates.</p>
+        </div>
+        <div class="card">
+          <h4>Use injectAsync for heavy services</h4>
+          <p>Great for export, PDF, charting, analytics, and rarely used enterprise tools.</p>
+        </div>
+        <div class="card">
+          <h4>Monitor deprecations</h4>
+          <p>Plan migration away from deprecated Webpack builder paths.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="mistakes">
+      <div class="section-title">
+        <div class="num">08</div>
+        <div>
+          <h2>Common Mistakes</h2>
+          <p>What teams should avoid while adopting Angular v22.</p>
+        </div>
+      </div>
+
+      <ul class="clean warning">
+        <li>Using new APIs everywhere without understanding production impact.</li>
+        <li>Replacing RxJS completely even where streams are the better abstraction.</li>
+        <li>Ignoring accessibility because Angular Aria is available.</li>
+        <li>Putting long-running arrow functions directly inside templates.</li>
+        <li>Using <code>injectAsync</code> for small services that do not need lazy loading.</li>
+        <li>Not reviewing Webpack builder deprecations before upgrading build pipelines.</li>
+        <li>Assuming OnPush default means performance is automatic without good state design.</li>
+      </ul>
+    </section>
+
+    <section id="migration">
+      <div class="section-title">
+        <div class="num">09</div>
+        <div>
+          <h2>Migration and Breaking-change Notes</h2>
+          <p>Important upgrade considerations for Angular v22.</p>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Area</th>
+            <th>What changed</th>
+            <th>Recommended action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Webpack builders</td>
+            <td>Webpack support and related build tooling are deprecated.</td>
+            <td>Move toward the modern Angular application builder and watch TSGo-related updates.</td>
+          </tr>
+          <tr>
+            <td>Change detection</td>
+            <td>OnPush is default for new apps; previous default is renamed Eager.</td>
+            <td>Review assumptions in legacy components and state mutation patterns.</td>
+          </tr>
+          <tr>
+            <td>Forms</td>
+            <td>Signal Forms are production-ready.</td>
+            <td>Use for new complex forms; migrate old forms gradually.</td>
+          </tr>
+          <tr>
+            <td>Async data</td>
+            <td>resource and httpResource are production-ready.</td>
+            <td>Use for simple declarative async state; keep RxJS where needed.</td>
+          </tr>
+          <tr>
+            <td>Router</td>
+            <td>Experimental navigation and cleanup APIs are available.</td>
+            <td>Use carefully and test memory behavior in large apps.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="notes">
+      <div class="section-title">
+        <div class="num">10</div>
+        <div>
+          <h2>Beginner, Intermediate, and Expert Notes</h2>
+          <p>Quick learning notes by skill level.</p>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="card">
+          <span class="pill stable">Beginner</span>
+          <h4>What to learn first</h4>
+          <p>Components, templates, signals, services, routing, forms, and HTTP basics.</p>
+        </div>
+
+        <div class="card">
+          <span class="pill preview">Intermediate</span>
+          <h4>What to focus on</h4>
+          <p>Signal Forms, httpResource, OnPush, Angular Aria, route cleanup, and template improvements.</p>
+        </div>
+
+        <div class="card">
+          <span class="pill experimental">Expert</span>
+          <h4>What architects should track</h4>
+          <p>MCP workflows, WebMCP, async DI boundaries, builder deprecations, and future error boundaries.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="interview">
+      <div class="section-title">
+        <div class="num">11</div>
+        <div>
+          <h2>Interview Questions</h2>
+          <p>Useful questions for Angular v22 preparation.</p>
+        </div>
+      </div>
+
+      <div class="feature">
+        <h3>Q1. What are the three major production-ready features in Angular v22?</h3>
+        <p>Signal Forms, Angular Aria, and asynchronous reactivity APIs such as resource and httpResource.</p>
+      </div>
+
+      <div class="feature">
+        <h3>Q2. Why is Signal Forms important?</h3>
+        <p>It gives Angular a modern, signal-based forms API that is strongly typed, declarative, reactive, and suitable for complex enterprise forms.</p>
+      </div>
+
+      <div class="feature">
+        <h3>Q3. When should you use httpResource instead of HttpClient with observables?</h3>
+        <p>Use httpResource for simple UI-driven data fetching where parameters depend on signals. Use RxJS when you need advanced stream composition.</p>
+      </div>
+
+      <div class="feature">
+        <h3>Q4. What is injectAsync?</h3>
+        <p>It is an async dependency injection API that allows large services to be lazy-loaded only when needed.</p>
+      </div>
+
+      <div class="feature">
+        <h3>Q5. What changed in Angular change detection?</h3>
+        <p>OnPush is now the default for new applications, and the previous default strategy is renamed ChangeDetectionStrategy.Eager.</p>
+      </div>
+
+      <div class="feature">
+        <h3>Q6. What is WebMCP?</h3>
+        <p>WebMCP is an experimental way for web apps to expose structured browser tools that AI agents can use directly.</p>
+      </div>
+    </section>
+
+    <section id="roadmap">
+      <div class="section-title">
+        <div class="num">12</div>
+        <div>
+          <h2>Learning Roadmap</h2>
+          <p>A practical path to master Angular v22.</p>
+        </div>
+      </div>
+
+      <div class="roadmap">
+        <div class="phase">
+          <b>Phase 1</b>
+          <span>Learn standalone components, templates, control flow, routing, services, and HttpClient.</span>
+        </div>
+        <div class="phase">
+          <b>Phase 2</b>
+          <span>Learn signals, computed, effect, input/output signals, and signal-based component design.</span>
+        </div>
+        <div class="phase">
+          <b>Phase 3</b>
+          <span>Learn Signal Forms and compare them with Reactive Forms.</span>
+        </div>
+        <div class="phase">
+          <b>Phase 4</b>
+          <span>Learn resource and httpResource for async data loading.</span>
+        </div>
+        <div class="phase">
+          <b>Phase 5</b>
+          <span>Learn Angular Aria and build accessible design-system components.</span>
+        </div>
+        <div class="phase">
+          <b>Phase 6</b>
+          <span>Learn OnPush, zoneless thinking, performance profiling, and lazy loading with injectAsync.</span>
+        </div>
+        <div class="phase">
+          <b>Phase 7</b>
+          <span>Explore Angular MCP, Agent Skills, WebMCP, and future @boundary error handling.</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <div class="num">13</div>
+        <div>
+          <h2>Final Summary</h2>
+          <p>Angular v22 is about production readiness, AI readiness, and performance-first defaults.</p>
+        </div>
+      </div>
+
+      <p>
+        Angular v22 shows a clear direction: build applications with signals, ship accessible user interfaces,
+        simplify async data handling, support AI-assisted workflows, improve templates, and move toward faster,
+        cleaner build infrastructure.
+      </p>
+
+      <ul class="clean">
+        <li>Use Signal Forms for modern form-heavy applications.</li>
+        <li>Use Angular Aria for accessible custom UI components.</li>
+        <li>Use resource and httpResource for signal-friendly async data.</li>
+        <li>Use injectAsync for large lazy-loaded services.</li>
+        <li>Prepare for builder changes and Webpack deprecations.</li>
+      </ul>
+    </section>
+
+    <section id="linkedin">
+      <div class="section-title">
+        <div class="num">14</div>
+        <div>
+          <h2>LinkedIn Sharing Content</h2>
+          <p>Use this caption when publishing your GitHub Pages link.</p>
+        </div>
+      </div>
+
+      <h3>LinkedIn sharing title</h3>
+      <div class="linkedin-box">Angular v22 Complete Analysis — Signal Forms, Angular Aria, AI Tooling, Performance & Architecture</div>
+
+      <h3>LinkedIn caption</h3>
+      <div class="linkedin-box">🚀 I created a complete Angular v22 analysis page covering the latest updates from the Angular team.
+
+It includes Signal Forms, Angular Aria, resource/httpResource, AI tooling, MCP, WebMCP, router updates, @Service, injectAsync, template improvements, OnPush default, migration notes, examples, best practices, and interview questions.
+
+This is useful for Angular developers, frontend engineers, and architects who want to understand where Angular is heading.
+
+🔗 Read here: [PASTE_YOUR_GITHUB_PAGES_LINK]
+
+#Angular #Angular22 #FrontendDevelopment #TypeScript #JavaScript #WebDevelopment #SoftwareArchitecture #AngularDeveloper #FrontendEngineering #TechCommunity</div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    Built as a single-file HTML page for GitHub Pages. Source article: Angular Blog — Announcing Angular v22.
+  </footer>
+</div>
+
+<script>
+  document.querySelectorAll('.copy').forEach(button => {
+    button.addEventListener('click', async () => {
+      const code = button.nextElementSibling.innerText;
+      try {
+        await navigator.clipboard.writeText(code);
+        const original = button.innerText;
+        button.innerText = 'Copied!';
+        setTimeout(() => button.innerText = original, 1200);
+      } catch (err) {
+        button.innerText = 'Copy failed';
+        setTimeout(() => button.innerText = 'Copy', 1200);
+      }
+    });
+  });
+</script>
+</body>
+</html>
